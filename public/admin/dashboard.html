@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repuestos Chun — Panel de Administración</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body class="dashboard-page">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a href="/" class="navbar__logo-link">
+        <img src="/img/logoheader2.png" alt="Repuestos Chun" class="navbar__logo-img" />
+      </a>
+      <div class="navbar__acciones">
+        <span class="navbar__usuario" id="navbar-usuario"></span>
+        <button class="btn-secundario" id="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main class="dashboard-main">
+    <div class="dashboard-header">
+      <div>
+        <h2 class="dashboard-header__titulo">Productos</h2>
+        <p class="dashboard-header__subtitulo" id="conteo-productos">Cargando...</p>
+      </div>
+      <button class="btn-primario" id="btn-nuevo-producto">
+        + Agregar producto
+      </button>
+    </div>
+
+    <!-- Estado de carga -->
+    <div class="estado-carga" id="estado-carga">
+      <div class="spinner"></div>
+      <p>Cargando productos...</p>
+    </div>
+
+    <!-- Estado vacío -->
+    <div class="estado-vacio oculto" id="estado-vacio">
+      <p style="font-size:3rem">📦</p>
+      <p>No hay productos todavía. ¡Agrega el primero!</p>
+    </div>
+
+    <!-- Tabla de productos -->
+    <div class="tabla-wrapper oculto" id="tabla-wrapper">
+      <table class="tabla-productos">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Visible</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-cuerpo"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ===== MODAL: AGREGAR / EDITAR PRODUCTO ===== -->
+  <div class="modal-overlay oculto" id="modal-overlay">
+    <div class="modal-panel" id="modal-panel">
+
+      <div class="modal-panel__header">
+        <h3 class="modal-panel__titulo" id="modal-titulo">Agregar producto</h3>
+        <button class="modal-panel__cerrar" id="btn-cerrar-modal">✕</button>
+      </div>
+
+      <form class="producto-form" id="producto-form" novalidate>
+        <input type="hidden" id="campo-id" />
+
+        <!-- Imágenes (máx. 3) -->
+        <div class="campo-grupo">
+          <label class="campo-label">Imágenes del producto <span class="requerido">*</span></label>
+          <p class="upload-hint">La primera imagen es la principal. Máximo 3.</p>
+          <div class="upload-grid">
+
+            <!-- Slot 0 — Principal -->
+            <div class="upload-slot" id="upload-slot-0">
+              <div class="upload-slot__placeholder" id="upload-placeholder-0">
+                <span class="upload-slot__icono">📷</span>
+                <p>Principal</p>
+              </div>
+              <div class="upload-slot__preview oculto" id="upload-preview-0">
+                <img class="upload-slot__img" id="upload-img-0" src="" alt="Imagen 1" />
+                <button type="button" class="upload-slot__quitar" data-slot="0">✕</button>
+              </div>
+              <input type="file" id="upload-input-0" class="oculto" accept="image/jpeg,image/png,image/webp" />
+            </div>
+
+            <!-- Slot 1 -->
+            <div class="upload-slot" id="upload-slot-1">
+              <div class="upload-slot__placeholder" id="upload-placeholder-1">
+                <span class="upload-slot__icono">+</span>
+                <p>Foto 2</p>
+              </div>
+              <div class="upload-slot__preview oculto" id="upload-preview-1">
+                <img class="upload-slot__img" id="upload-img-1" src="" alt="Imagen 2" />
+                <button type="button" class="upload-slot__quitar" data-slot="1">✕</button>
+              </div>
+              <input type="file" id="upload-input-1" class="oculto" accept="image/jpeg,image/png,image/webp" />
+            </div>
+
+            <!-- Slot 2 -->
+            <div class="upload-slot" id="upload-slot-2">
+              <div class="upload-slot__placeholder" id="upload-placeholder-2">
+                <span class="upload-slot__icono">+</span>
+                <p>Foto 3</p>
+              </div>
+              <div class="upload-slot__preview oculto" id="upload-preview-2">
+                <img class="upload-slot__img" id="upload-img-2" src="" alt="Imagen 3" />
+                <button type="button" class="upload-slot__quitar" data-slot="2">✕</button>
+              </div>
+              <input type="file" id="upload-input-2" class="oculto" accept="image/jpeg,image/png,image/webp" />
+            </div>
+
+          </div>
+          <div class="progreso-upload oculto" id="progreso-upload">
+            <div class="progreso-upload__barra">
+              <div class="progreso-upload__relleno" id="progreso-relleno"></div>
+            </div>
+            <span id="progreso-texto">Procesando imagen...</span>
+          </div>
+          <input type="hidden" id="campo-imagen-url" />
+        </div>
+
+        <!-- Nombre -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="campo-nombre">Nombre <span class="requerido">*</span></label>
+          <input class="campo-input" type="text" id="campo-nombre" placeholder="Ej: Filtro de aceite Honda CBR" required />
+        </div>
+
+        <!-- Descripción -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="campo-descripcion">Descripción</label>
+          <textarea class="campo-input campo-textarea" id="campo-descripcion" placeholder="Describe el repuesto, compatibilidad, etc." rows="3"></textarea>
+        </div>
+
+        <!-- Modelo de motocicleta compatible (multi-select) -->
+        <div class="campo-grupo">
+          <label class="campo-label">Modelos de motocicleta compatibles</label>
+          <div class="moto-selector" id="moto-selector">
+            <button type="button" class="moto-selector__trigger" id="moto-selector-trigger">
+              <span id="moto-selector-texto">— Seleccionar modelos —</span>
+              <svg class="moto-selector__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <div class="moto-selector__panel oculto" id="moto-selector-panel">
+              <div class="moto-selector__busqueda-wrap">
+                <input type="text" class="moto-selector__busqueda" id="moto-selector-busqueda" placeholder="Buscar marca o modelo..." autocomplete="off" />
+              </div>
+              <div class="moto-selector__lista" id="moto-selector-lista"></div>
+            </div>
+          </div>
+          <input type="hidden" id="campo-modelo-moto" />
+        </div>
+
+        <!-- Sucursales disponibles -->
+        <div class="campo-grupo">
+          <label class="campo-label">Sucursales disponibles</label>
+          <div class="sucursal-checks" id="sucursal-checks">
+            <label class="sucursal-check">
+              <input type="checkbox" value="Villa Valdez" />
+              <span>Villa Valdez</span>
+            </label>
+            <label class="sucursal-check">
+              <input type="checkbox" value="Villa Fundación" />
+              <span>Villa Fundación</span>
+            </label>
+            <label class="sucursal-check">
+              <input type="checkbox" value="Bajos de Haina" />
+              <span>Bajos de Haina</span>
+            </label>
+            <label class="sucursal-check">
+              <input type="checkbox" value="Bonao" />
+              <span>Bonao</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Precio -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="campo-precio">Precio (en DOP) <span class="requerido">*</span></label>
+          <input class="campo-input" type="number" id="campo-precio" placeholder="0.00" min="0" step="0.01" required />
+        </div>
+
+        <!-- Cantidad disponible -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="campo-cantidad">Cantidad Disponible (Q)</label>
+          <input class="campo-input" type="number" id="campo-cantidad" placeholder="0" min="0" step="1" />
+        </div>
+
+        <!-- Categoría -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="campo-categoria">Categoría <span class="requerido">*</span></label>
+          <select class="campo-input campo-select" id="campo-categoria">
+            <option value="">— Seleccionar categoría —</option>
+            <!-- Opciones generadas por products.js -->
+          </select>
+        </div>
+
+        <!-- Subcategoría (aparece al seleccionar categoría) -->
+        <div class="campo-grupo oculto" id="grupo-subcategoria">
+          <label class="campo-label" for="campo-subcategoria">Subcategoría</label>
+          <select class="campo-input campo-select" id="campo-subcategoria">
+            <option value="">— Seleccionar subcategoría —</option>
+          </select>
+        </div>
+
+        <!-- Visible -->
+        <div class="campo-grupo campo-grupo--fila">
+          <label class="campo-label" for="campo-disponible">Visible en el catálogo</label>
+          <label class="toggle">
+            <input type="checkbox" id="campo-disponible" checked />
+            <span class="toggle__slider"></span>
+          </label>
+        </div>
+
+        <!-- Alertas del formulario -->
+        <div class="alerta alerta--error oculto" id="form-error"></div>
+        <div class="alerta alerta--exito oculto" id="form-exito"></div>
+
+        <!-- Botones -->
+        <div class="form-acciones">
+          <button type="button" class="btn-secundario" id="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-primario" id="btn-guardar">Guardar producto</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para eliminar -->
+  <div class="modal-overlay oculto" id="modal-confirmar">
+    <div class="modal-confirmar">
+      <p class="modal-confirmar__icono">🗑️</p>
+      <h3 class="modal-confirmar__titulo">¿Eliminar producto?</h3>
+      <p class="modal-confirmar__texto">Esta acción no se puede deshacer.</p>
+      <div class="form-acciones">
+        <button class="btn-secundario" id="btn-cancelar-eliminar">Cancelar</button>
+        <button class="btn-peligro" id="btn-confirmar-eliminar">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/auth.js"></script>
+  <script src="/admin/js/upload.js"></script>
+  <script src="/admin/js/products.js"></script>
+</body>
+</html>

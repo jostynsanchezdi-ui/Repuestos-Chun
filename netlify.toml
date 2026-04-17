@@ -1,0 +1,25 @@
+[build]
+  publish = "public"
+  command = ""
+
+# Rutas limpias sin .html
+[[redirects]]
+  from = "/piezas"
+  to = "/piezas/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/dashboard"
+  to = "/admin/dashboard.html"
+  status = 200
+
+# Fallback 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404
