@@ -1,0 +1,100 @@
+Super Gato	CG-150
+Super Gato	CG 200 Standard
+Super Gato	CG 200 Racing
+Super Gato	CG 250
+Super Gato	Bengala 250
+Super Gato	Frontier 250
+Super Gato	LGR 250
+Super Gato	GY250
+Super Gato	Super Cub 110
+Super Gato	RS 150
+Tauro Turbo	CG 200
+Tauro Turbo	CG200 Racing
+Tauro Turbo	Super Cub C110
+Tauro Turbo	CRX 250
+Tauro Turbo	Nitro 125
+Tauro Turbo	Elite 110
+X1000	CG 125
+X1000	CG 150 R6
+X1000	CG 200 R6
+X1000	CG 250 R6
+X1000	Diamond 110
+X1000	T-105
+X1000	Super Delivery
+X1000	Steel 150
+Haojue	DM-150
+Haojue	KA-150
+Haojue	HJ-125 Sport
+Loncin	CR6 (Loncin 300)
+Nipponia	Patrón 125
+Nipponia	Magneto XP
+Bajaj	Boxer MB 150
+Bajaj	Platina 100
+Bajaj	Platina 125 Pro
+TVS	HLX 125
+TVS	Apache RTR 180
+TVS	Apache RR 310
+Hero	Eco Deluxe
+Hero	Eco-125
+Hero	Eco Express
+Haojue	Xpress 125
+Haojue	HJ-125
+Haojue	VR-150
+Haojue	VS-125
+Haojue	VN-100
+Lifan	Glean 100
+Yamaha	Crux
+Yamaha	Jog Artística
+Yamaha	BWS
+Suzuki	Address 125
+Super Gato	Pasola 125 Sport
+Super Gato	Pasola FS150
+Super Gato	Feline Spirit
+Tauro Turbo	Lead 125
+Tauro Turbo	BZ 150
+X1000	New Jog 150
+X1000	Super Jog
+X1000	Cruise 150
+X1000	Lead 150
+X1000	PG 125
+X1000	Dio
+X1000	Address 150
+X1000	BWS 175
+Nipponia	VPS125
+Nipponia	VRS 150
+Yamaha	RX115
+Suzuki	AX100
+Suzuki	GN 125
+Honda	Super Cub
+Honda	Navi
+Suzuki	GD 115 (GD15)
+X1000	XROAD 200
+X1000	200ZH 5DL
+X1000	Nova
+Super Soco	TC MAX
+Lifan	K29
+KTM	Duke 200
+KTM	Duke 250
+KTM	Duke 390
+KTM	RC 390
+KTM	Adventure 250
+KTM	690 Enduro R
+CFMoto	NK 300
+CFMoto	450 SR
+CFMoto	675SR-R
+CFMoto	800MT-X
+CFMoto	MT (Gama General)
+CFMoto	Z-Force 1000
+CFMoto	Z-Force 950
+Benelli	BN 125
+Benelli	302R
+Benelli	Leoncino 500
+Benelli	TRK 502 X
+Honda	CRF 250
+Honda	Africa Twin
+Honda	CBR
+Honda	XR
+Yamaha	XTZ
+Loncin	525RR
+Loncin	DS525X
+Ronco	GR200

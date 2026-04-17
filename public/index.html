@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repuestos Chun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    /* Crítico: oculta la página inmediatamente hasta que el CSS externo cargue */
+    #pantalla-carga {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== PANTALLA DE CARGA ===== -->
+  <div class="pantalla-carga" id="pantalla-carga">
+    <div class="pantalla-carga__contenido">
+
+      <!-- Moto SVG animada -->
+      <div class="moto-svg-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 120" class="moto-svg">
+
+          <!-- ── RUEDA TRASERA (neumático grueso + 3 radios) ── -->
+          <g class="moto-rueda" style="transform-origin:62px 92px">
+            <circle cx="62" cy="92" r="27" fill="none" stroke="white" stroke-width="7"/>
+            <circle cx="62" cy="92" r="19" fill="none" stroke="white" stroke-width="2" opacity="0.5"/>
+            <circle cx="62" cy="92" r="4.5" fill="white"/>
+            <line x1="62"  y1="73"   x2="62"   y2="111"  stroke="white" stroke-width="1.6" opacity="0.5"/>
+            <line x1="78.5" y1="82.5" x2="45.5" y2="101.5" stroke="white" stroke-width="1.6" opacity="0.5"/>
+            <line x1="78.5" y1="101.5" x2="45.5" y2="82.5" stroke="white" stroke-width="1.6" opacity="0.5"/>
+          </g>
+
+          <!-- ── RUEDA DELANTERA (neumático grueso + 3 radios) ── -->
+          <g class="moto-rueda" style="transform-origin:196px 86px">
+            <circle cx="196" cy="86" r="24" fill="none" stroke="white" stroke-width="6.5"/>
+            <circle cx="196" cy="86" r="16.5" fill="none" stroke="white" stroke-width="1.8" opacity="0.5"/>
+            <circle cx="196" cy="86" r="4" fill="white"/>
+            <line x1="196"  y1="69.5" x2="196"  y2="102.5" stroke="white" stroke-width="1.5" opacity="0.5"/>
+            <line x1="210.3" y1="77.8" x2="181.7" y2="94.2"  stroke="white" stroke-width="1.5" opacity="0.5"/>
+            <line x1="210.3" y1="94.2" x2="181.7" y2="77.8"  stroke="white" stroke-width="1.5" opacity="0.5"/>
+          </g>
+
+          <!-- ── BASCULANTE (swingarm) ── -->
+          <line x1="62" y1="92" x2="104" y2="70" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+
+          <!-- ── BLOQUE DE MOTOR ── -->
+          <rect x="100" y="68" width="36" height="26" rx="5" fill="white" opacity="0.92"/>
+
+          <!-- ── CHASIS: tubo superior + down tube ── -->
+          <polyline points="104,66 120,44 162,42" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <line x1="162" y1="42" x2="136" y2="68" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
+
+          <!-- ── SUBFRAME TRASERO ── -->
+          <line x1="84" y1="52" x2="104" y2="66" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+
+          <!-- ── TANQUE DE COMBUSTIBLE (forma característica) ── -->
+          <path d="M114 44 C117 27 152 21 164 35 C168 41 164 46 156 46 L114 44 Z" fill="white"/>
+
+          <!-- ── CARENADO TRASERO / ASIENTO ── -->
+          <path d="M76 52 C84 46 108 44 116 44 L110 56 C98 54 84 56 78 58 Z" fill="white" opacity="0.85"/>
+
+          <!-- ── HORQUILLA DELANTERA ── -->
+          <line x1="163" y1="45" x2="196" y2="86" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+          <line x1="158" y1="41" x2="190" y2="82" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.38"/>
+
+          <!-- ── MANILLAR (clip-on deportivo) ── -->
+          <path d="M158 40 L166 32 M158 40 L150 34" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+          <!-- ── ESCAPE ── -->
+          <path d="M100 91 Q80 94 62 96" stroke="white" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+        </svg>
+      </div>
+
+      <!-- Puntos de carga naranja -->
+      <div class="carga-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    </div>
+  </div>
+
+  <header class="navbar-header">
+  <nav class="navbar">
+
+    <!-- Logo -->
+    <a href="/" class="navbar__logo">
+      <img src="/img/logoheader2.png" alt="Repuestos Chun" class="navbar__logo-img" />
+    </a>
+
+    <!-- Links centrales -->
+    <ul class="navbar__lista">
+      <li><a href="#productos"  class="navbar__link">Piezas</a></li>
+      <li><a href="#servicios"  class="navbar__link">Servicios</a></li>
+      <li><a href="#sucursales" class="navbar__link">Sucursales</a></li>
+    </ul>
+
+    <!-- Botones derecha -->
+    <div class="navbar__acciones">
+      <button class="navbar__btn-ghost" id="btn-admin">Administrador</button>
+      <a href="https://wa.me/18295195473?text=Hola%2C%20me%20interesa%20un%20repuesto.%20%C2%BFMe%20pueden%20ayudar%3F" target="_blank" rel="noopener noreferrer" class="navbar__btn-cta">Contáctanos</a>
+    </div>
+
+    <!-- Botón hamburger (solo mobile) -->
+    <button class="navbar__hamburger" id="btn-hamburger" aria-label="Abrir menú" aria-expanded="false">
+      <span class="hamburger__linea"></span>
+      <span class="hamburger__linea"></span>
+      <span class="hamburger__linea"></span>
+    </button>
+
+  </nav>
+  </header>
+
+  <!-- ===== MENÚ MOBILE ===== -->
+  <div class="menu-mobile" id="menu-mobile" aria-hidden="true">
+
+    <div class="menu-mobile__panel">
+      <nav class="menu-mobile__nav">
+        <a href="#productos"  class="menu-mobile__link" data-menu-link>Piezas</a>
+        <a href="#servicios"  class="menu-mobile__link" data-menu-link>Servicios</a>
+        <a href="#sucursales" class="menu-mobile__link" data-menu-link>Sucursales</a>
+      </nav>
+      <div class="menu-mobile__divider"></div>
+      <button class="menu-mobile__btn-admin" id="btn-admin-mobile">Administrador</button>
+    </div>
+
+    <!-- Fondo semitransparente -->
+    <div class="menu-mobile__fondo" id="menu-mobile-fondo"></div>
+  </div>
+
+  <!-- ===== MODAL DE ADMINISTRADOR ===== -->
+  <div class="admin-overlay oculto" id="admin-overlay" role="dialog" aria-modal="true" aria-labelledby="admin-titulo">
+
+    <div class="admin-modal">
+
+      <!-- Cerrar -->
+      <button class="admin-modal__cerrar" id="admin-cerrar" aria-label="Cerrar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Encabezado -->
+      <div class="admin-modal__header">
+        <div class="admin-modal__icono">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+               fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h2 class="admin-modal__titulo" id="admin-titulo">Panel de Administración</h2>
+        <p class="admin-modal__subtitulo">Acceso exclusivo para administradores</p>
+      </div>
+
+      <!-- Formulario -->
+      <form class="admin-modal__form" id="admin-form" autocomplete="off">
+
+        <div class="admin-modal__campo">
+          <label class="admin-modal__label" for="admin-email">Correo electrónico</label>
+          <input
+            class="admin-modal__input"
+            type="email"
+            id="admin-email"
+            name="email"
+            placeholder="admin@ejemplo.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="admin-modal__campo">
+          <label class="admin-modal__label" for="admin-password">Contraseña</label>
+          <div class="admin-modal__input-wrapper">
+            <input
+              class="admin-modal__input"
+              type="password"
+              id="admin-password"
+              name="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="admin-modal__ojo" id="admin-ojo" aria-label="Mostrar contraseña">
+              <svg id="ojo-abierto" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg id="ojo-cerrado" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   style="display:none">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <p class="admin-modal__error oculto" id="admin-error">Usuario o contraseña incorrectos.</p>
+
+        <button type="submit" class="admin-modal__btn-submit">
+          Ingresar al panel
+        </button>
+
+      </form>
+
+      <p class="admin-modal__nota">Acceso restringido · Solo personal autorizado</p>
+
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <picture>
+      <source media="(max-width: 700px)" srcset="/img/mobilehero.png" />
+      <img src="/img/imagenhero.jpg?v=2" alt="Repuestos Chun" class="hero__imagen" />
+    </picture>
+
+    <div class="hero__contenido">
+      <h1 class="hero__titulo">Las mejores piezas<br class="hero__br-mobile" /> para tu motocicleta</h1>
+      <p class="hero__subtitulo">Las tenemos nosotros</p>
+      <a href="/piezas" class="hero__cta">Ver Piezas</a>
+    </div>
+  </section>
+
+  <!-- ===== BANNER INFO ===== -->
+  <div class="info-banner">
+
+    <div class="info-banner__item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      <div>
+        <span class="info-banner__titulo">Piezas de Calidad</span>
+        <span class="info-banner__desc">Solo marcas confiables y certificadas</span>
+      </div>
+    </div>
+
+    <div class="info-banner__item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="6"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+      </svg>
+      <div>
+        <span class="info-banner__titulo">+30 Años en el Mercado</span>
+        <span class="info-banner__desc">Experiencia y trayectoria comprobada</span>
+      </div>
+    </div>
+
+    <div class="info-banner__item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+      <div>
+        <span class="info-banner__titulo">Servicio Especializado</span>
+        <span class="info-banner__desc">Asesoría técnica para cada moto</span>
+      </div>
+    </div>
+
+    <div class="info-banner__item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <div>
+        <span class="info-banner__titulo">Garantía en tus Compras</span>
+        <span class="info-banner__desc">Respaldo total en cada producto</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECCIÓN PIEZAS ===== -->
+  <section class="seccion-piezas" id="productos">
+    <h2 class="seccion-piezas__titulo">Explora nuestras piezas</h2>
+
+    <div class="categorias-grid">
+
+      <a href="/piezas?categoria=motor" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/motor.png" alt="Motor y Sistema de Combustión" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Motor y Sistema de Combustión</span>
+      </a>
+
+      <a href="/piezas?categoria=transmision" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/transmision.png" alt="Transmisión" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Transmisión</span>
+      </a>
+
+      <a href="/piezas?categoria=suspension" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/suspension.png" alt="Suspensión" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Suspensión</span>
+      </a>
+
+      <a href="/piezas?categoria=chasis" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/chasis.png" alt="Chasis y Estructura" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Chasis y Estructura</span>
+      </a>
+
+      <a href="/piezas?categoria=control" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/control.png" alt="Control y Ergonomía" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Control y Ergonomía</span>
+      </a>
+
+      <a href="/piezas?categoria=electrico" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/luces.png" alt="Sistema Eléctrico y Luces" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Sistema Eléctrico y Luces</span>
+      </a>
+
+      <a href="/piezas?categoria=gomas" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/gomas.png" alt="Gomas" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Gomas</span>
+      </a>
+
+      <a href="/piezas?categoria=proteccion" class="categoria-card">
+        <div class="categoria-card__img-wrapper">
+          <img src="/img/helmet.png" alt="Protección Personal" class="categoria-card__img" />
+        </div>
+        <span class="categoria-card__nombre">Protección Personal</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== SECCIÓN SERVICIOS ===== -->
+  <section class="servicios" id="servicios">
+
+    <div class="servicios__fondo">
+
+      <!-- Decoración de fondo -->
+      <div class="servicios__deco servicios__deco--1"></div>
+      <div class="servicios__deco servicios__deco--2"></div>
+
+      <div class="servicios__intro">
+        <p class="servicios__etiqueta">Lo que hacemos</p>
+        <h2 class="servicios__titulo">Nuestros Servicios</h2>
+        <p class="servicios__desc">Más de 30 años ofreciendo soluciones completas para tu motocicleta.<br>Confía en manos expertas.</p>
+      </div>
+
+      <div class="servicios__grid">
+
+        <!-- Reparación -->
+        <div class="servicio-card">
+          <div class="servicio-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                 stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <h3 class="servicio-card__titulo">Reparación</h3>
+          <p class="servicio-card__desc">Diagnóstico y reparación profesional de cualquier falla mecánica o eléctrica. Devolvemos tu moto a su mejor estado.</p>
+        </div>
+
+        <!-- Montaje de Piezas -->
+        <div class="servicio-card">
+          <div class="servicio-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                 stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+              <path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>
+            </svg>
+          </div>
+          <h3 class="servicio-card__titulo">Montaje de Piezas</h3>
+          <p class="servicio-card__desc">Instalación precisa de repuestos originales y alternativos. Garantizamos un ajuste perfecto en cada pieza montada.</p>
+        </div>
+
+        <!-- Personalización -->
+        <div class="servicio-card">
+          <div class="servicio-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                 stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <h3 class="servicio-card__titulo">Personalización</h3>
+          <p class="servicio-card__desc">Dale tu toque personal a la moto. Modificaciones estéticas y de rendimiento adaptadas a tu estilo y necesidades.</p>
+        </div>
+
+        <!-- Cambio de Fluidos -->
+        <div class="servicio-card">
+          <div class="servicio-card__icono">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                 stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+          <h3 class="servicio-card__titulo">Cambio de Fluidos</h3>
+          <p class="servicio-card__desc">Aceite de motor, líquido de frenos, refrigerante y más. Mantenemos tu moto lubricada y en óptimas condiciones.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECCIÓN SUCURSALES ===== -->
+  <section class="sucursales" id="sucursales">
+
+    <div class="sucursales__intro">
+      <p class="sucursales__etiqueta">¿Dónde estamos?</p>
+      <h2 class="sucursales__titulo">Nuestras Sucursales</h2>
+      <p class="sucursales__desc">Visítanos y encuentra todo lo que necesitas para tu motocicleta.</p>
+    </div>
+
+    <div class="sucursales__contenedor">
+
+      <!-- ── Sucursal 1: Villa Valdez, San Cristóbal (Principal) ── -->
+      <div class="sucursal-card">
+        <div class="sucursal-card__info">
+          <h3 class="sucursal-card__nombre">Villa Valdez, San Cristóbal</h3>
+          <div class="sucursal-card__detalles">
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Dirección</span>
+                <span class="sucursal-card__item-valor">C. Francisco J. Peynado, Mercado<br>San Cristóbal 91005</span>
+              </div>
+            </div>
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Horario</span>
+                <span class="sucursal-card__item-valor">Lun – Vie: 8:00am – 6:00pm</span>
+                <span class="sucursal-card__item-valor">Sábado: 8:00am – 2:00pm</span>
+                <span class="sucursal-card__item-valor sucursal-card__item-valor--cerrado">Domingo: Cerrado</span>
+              </div>
+            </div>
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.69a16 16 0 0 0 6.29 6.29l1.78-1.78a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Teléfono</span>
+                <span class="sucursal-card__item-valor">809-000-0000</span>
+              </div>
+            </div>
+          </div>
+          <a href="https://maps.google.com/maps?q=CV8M%2B9WR+San+Crist%C3%B3bal+Dominican+Republic" target="_blank" rel="noopener noreferrer" class="sucursal-card__cta">
+            Cómo llegar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sucursal-card__mapa">
+          <iframe src="https://maps.google.com/maps?q=CV8M%2B9WR+San+Crist%C3%B3bal+Dominican+Republic&output=embed&z=17"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Repuestos Chun — Villa Valdez"></iframe>
+        </div>
+      </div>
+
+      <!-- ── Sucursal 2: Villa Fundación, San Cristóbal ── -->
+      <div class="sucursal-card">
+        <div class="sucursal-card__info">
+          <h3 class="sucursal-card__nombre">Villa Fundación, San Cristóbal</h3>
+          <div class="sucursal-card__detalles">
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Dirección</span>
+                <span class="sucursal-card__item-valor">Villa Fundación, San Cristóbal</span>
+              </div>
+            </div>
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Horario</span>
+                <span class="sucursal-card__item-valor">Lun – Vie: 8:00am – 6:00pm</span>
+                <span class="sucursal-card__item-valor">Sábado: 8:00am – 2:00pm</span>
+                <span class="sucursal-card__item-valor sucursal-card__item-valor--cerrado">Domingo: Cerrado</span>
+              </div>
+            </div>
+          </div>
+          <a href="https://maps.google.com/maps?q=CVHG%2BJJ+San+Crist%C3%B3bal+Dominican+Republic" target="_blank" rel="noopener noreferrer" class="sucursal-card__cta">
+            Cómo llegar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sucursal-card__mapa">
+          <iframe src="https://maps.google.com/maps?q=CVHG%2BJJ+San+Crist%C3%B3bal+Dominican+Republic&output=embed&z=17"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Repuestos Chun — Villa Fundación"></iframe>
+        </div>
+      </div>
+
+      <!-- ── Sucursal 3: Bajos de Haina, San Cristóbal ── -->
+      <div class="sucursal-card">
+        <div class="sucursal-card__info">
+          <h3 class="sucursal-card__nombre">Bajos de Haina, San Cristóbal</h3>
+          <div class="sucursal-card__detalles">
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Dirección</span>
+                <span class="sucursal-card__item-valor">Carr. Sánchez Vieja<br>Bajos de Haina 91000</span>
+              </div>
+            </div>
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Horario</span>
+                <span class="sucursal-card__item-valor">Lun – Vie: 8:00am – 6:00pm</span>
+                <span class="sucursal-card__item-valor">Sábado: 8:00am – 2:00pm</span>
+                <span class="sucursal-card__item-valor sucursal-card__item-valor--cerrado">Domingo: Cerrado</span>
+              </div>
+            </div>
+          </div>
+          <a href="https://maps.google.com/maps?q=CX7C%2BG57+Bajos+de+Haina+Dominican+Republic" target="_blank" rel="noopener noreferrer" class="sucursal-card__cta">
+            Cómo llegar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sucursal-card__mapa">
+          <iframe src="https://maps.google.com/maps?q=CX7C%2BG57+Bajos+de+Haina+Dominican+Republic&output=embed&z=17"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Repuestos Chun — Bajos de Haina"></iframe>
+        </div>
+      </div>
+
+      <!-- ── Sucursal 4: Bonao, Monseñor Nouel ── -->
+      <div class="sucursal-card">
+        <div class="sucursal-card__info">
+          <h3 class="sucursal-card__nombre">Bonao, Monseñor Nouel</h3>
+          <div class="sucursal-card__detalles">
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Dirección</span>
+                <span class="sucursal-card__item-valor">Bonao, Monseñor Nouel</span>
+              </div>
+            </div>
+            <div class="sucursal-card__item">
+              <div class="sucursal-card__icono"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="sucursal-card__item-texto">
+                <span class="sucursal-card__item-label">Horario</span>
+                <span class="sucursal-card__item-valor">Lun – Vie: 8:00am – 6:00pm</span>
+                <span class="sucursal-card__item-valor">Sábado: 8:00am – 2:00pm</span>
+                <span class="sucursal-card__item-valor sucursal-card__item-valor--cerrado">Domingo: Cerrado</span>
+              </div>
+            </div>
+          </div>
+          <a href="https://maps.google.com/maps?q=WHHR%2BHX+Bonao+Dominican+Republic" target="_blank" rel="noopener noreferrer" class="sucursal-card__cta">
+            Cómo llegar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sucursal-card__mapa">
+          <iframe src="https://maps.google.com/maps?q=WHHR%2BHX+Bonao+Dominican+Republic&output=embed&z=17"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Repuestos Chun — Bonao"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer-principal">
+
+    <div class="footer-principal__inner">
+
+      <!-- Marca + copyright -->
+      <div class="footer-reveal" data-delay="0">
+        <a href="/" class="footer-principal__logo-link">
+          <img src="/img/logoheader2.png" alt="Repuestos Chun" class="footer-principal__logo" />
+        </a>
+        <p class="footer-principal__copy">
+          Más de 30 años llevando las mejores piezas para tu motocicleta.
+        </p>
+        <p class="footer-principal__copy footer-principal__copy--year">
+          © <span id="footer-year"></span> Repuestos Chun.<br>San Cristóbal, República Dominicana.
+        </p>
+      </div>
+
+      <!-- Columnas de links -->
+      <div class="footer-principal__columnas">
+
+        <!-- Navegación -->
+        <div class="footer-reveal" data-delay="1">
+          <h4 class="footer-principal__col-titulo">Navegación</h4>
+          <ul class="footer-principal__lista">
+            <li><a href="#productos"  class="footer-principal__link">Piezas</a></li>
+            <li><a href="#servicios"  class="footer-principal__link">Servicios</a></li>
+            <li><a href="#sucursales" class="footer-principal__link">Sucursales</a></li>
+            <li><a href="https://wa.me/18295195473?text=Hola%2C%20me%20interesa%20un%20repuesto.%20%C2%BFMe%20pueden%20ayudar%3F" target="_blank" rel="noopener noreferrer" class="footer-principal__link">Contáctanos</a></li>
+          </ul>
+        </div>
+
+        <!-- Categorías -->
+        <div class="footer-reveal" data-delay="2">
+          <h4 class="footer-principal__col-titulo">Categorías</h4>
+          <ul class="footer-principal__lista">
+            <li><a href="/piezas?categoria=motor"       class="footer-principal__link">Motor</a></li>
+            <li><a href="/piezas?categoria=transmision" class="footer-principal__link">Transmisión</a></li>
+            <li><a href="/piezas?categoria=suspension"  class="footer-principal__link">Suspensión</a></li>
+            <li><a href="/piezas?categoria=electrico"   class="footer-principal__link">Eléctrico</a></li>
+            <li><a href="/piezas?categoria=gomas"       class="footer-principal__link">Gomas</a></li>
+          </ul>
+        </div>
+
+        <!-- Redes sociales -->
+        <div class="footer-reveal" data-delay="3">
+          <h4 class="footer-principal__col-titulo">Síguenos</h4>
+          <ul class="footer-principal__lista">
+
+            <li>
+              <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="footer-principal__link footer-principal__link--social">
+                <!-- Instagram -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+                Instagram
+              </a>
+            </li>
+
+            <li>
+              <a href="https://wa.me/18295195473?text=Hola%2C%20me%20interesa%20un%20repuesto.%20%C2%BFMe%20pueden%20ayudar%3F" target="_blank" rel="noopener noreferrer" class="footer-principal__link footer-principal__link--social">
+                <!-- WhatsApp -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+                </svg>
+                WhatsApp
+              </a>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Barra inferior -->
+    <div class="footer-principal__barra">
+      <span>Hecho con pasión para los amantes de las motos</span>
+    </div>
+
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ===== Pantalla de carga =====
+    window.addEventListener('load', () => {
+      const pantalla = document.getElementById('pantalla-carga');
+      setTimeout(() => {
+        pantalla.classList.add('pantalla-carga--salir');
+        setTimeout(() => pantalla.remove(), 600);
+      }, 1500);
+    });
+
+    // ===== Animación al navegar a una categoría =====
+    document.querySelectorAll('.categoria-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const destino = card.getAttribute('href');
+
+        // Crear overlay de carga
+        const overlay = document.createElement('div');
+        overlay.className = 'pantalla-carga';
+        overlay.innerHTML = `
+          <div class="pantalla-carga__contenido">
+            <div class="moto-svg-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 120" class="moto-svg">
+                <g class="moto-rueda" style="transform-origin:62px 92px">
+                  <circle cx="62" cy="92" r="27" fill="none" stroke="white" stroke-width="7"/>
+                  <circle cx="62" cy="92" r="19" fill="none" stroke="white" stroke-width="2" opacity="0.5"/>
+                  <circle cx="62" cy="92" r="4.5" fill="white"/>
+                  <line x1="62" y1="73" x2="62" y2="111" stroke="white" stroke-width="1.6" opacity="0.5"/>
+                  <line x1="78.5" y1="82.5" x2="45.5" y2="101.5" stroke="white" stroke-width="1.6" opacity="0.5"/>
+                  <line x1="78.5" y1="101.5" x2="45.5" y2="82.5" stroke="white" stroke-width="1.6" opacity="0.5"/>
+                </g>
+                <g class="moto-rueda" style="transform-origin:196px 86px">
+                  <circle cx="196" cy="86" r="24" fill="none" stroke="white" stroke-width="6.5"/>
+                  <circle cx="196" cy="86" r="16.5" fill="none" stroke="white" stroke-width="1.8" opacity="0.5"/>
+                  <circle cx="196" cy="86" r="4" fill="white"/>
+                  <line x1="196" y1="69.5" x2="196" y2="102.5" stroke="white" stroke-width="1.5" opacity="0.5"/>
+                  <line x1="210.3" y1="77.8" x2="181.7" y2="94.2" stroke="white" stroke-width="1.5" opacity="0.5"/>
+                  <line x1="210.3" y1="94.2" x2="181.7" y2="77.8" stroke="white" stroke-width="1.5" opacity="0.5"/>
+                </g>
+                <line x1="62" y1="92" x2="104" y2="70" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+                <rect x="100" y="68" width="36" height="26" rx="5" fill="white" opacity="0.92"/>
+                <polyline points="104,66 120,44 162,42" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <line x1="162" y1="42" x2="136" y2="68" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
+                <line x1="84" y1="52" x2="104" y2="66" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+                <path d="M114 44 C117 27 152 21 164 35 C168 41 164 46 156 46 L114 44 Z" fill="white"/>
+                <path d="M76 52 C84 46 108 44 116 44 L110 56 C98 54 84 56 78 58 Z" fill="white" opacity="0.85"/>
+                <line x1="163" y1="45" x2="196" y2="86" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+                <line x1="158" y1="41" x2="190" y2="82" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.38"/>
+                <path d="M158 40 L166 32 M158 40 L150 34" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+                <path d="M100 91 Q80 94 62 96" stroke="white" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="carga-dots">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+
+        setTimeout(() => {
+          overlay.classList.add('pantalla-carga--salir');
+          setTimeout(() => window.location.href = destino, 600);
+        }, 1500);
+      });
+    });
+
+    // ===== Scroll suave en todos los anchor links =====
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const id = this.getAttribute('href').slice(1);
+        if (!id) return;
+        const destino = document.getElementById(id);
+        if (!destino) return;
+        e.preventDefault();
+        destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ===== Menú hamburger mobile =====
+    const menuMobile   = document.getElementById('menu-mobile');
+    const btnHamburger = document.getElementById('btn-hamburger');
+    const menuFondo    = document.getElementById('menu-mobile-fondo');
+
+    const abrirMenu = () => {
+      menuMobile.classList.add('menu-mobile--abierto');
+      btnHamburger.classList.add('navbar__hamburger--activo');
+      btnHamburger.setAttribute('aria-expanded', 'true');
+      menuMobile.setAttribute('aria-hidden', 'false');
+    };
+
+    const cerrarMenu = () => {
+      menuMobile.classList.remove('menu-mobile--abierto');
+      btnHamburger.classList.remove('navbar__hamburger--activo');
+      btnHamburger.setAttribute('aria-expanded', 'false');
+      menuMobile.setAttribute('aria-hidden', 'true');
+    };
+
+    btnHamburger?.addEventListener('click', abrirMenu);
+    menuFondo?.addEventListener('click', cerrarMenu);
+
+    // Cerrar al hacer click en un link del menú
+    document.querySelectorAll('[data-menu-link]').forEach(link => {
+      link.addEventListener('click', cerrarMenu);
+    });
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && menuMobile.classList.contains('menu-mobile--abierto')) cerrarMenu();
+    });
+
+    // Botón admin dentro del menú mobile
+    document.getElementById('btn-admin-mobile')?.addEventListener('click', () => {
+      cerrarMenu();
+      setTimeout(abrirAdmin, 380);
+    });
+
+    // ===== Modal de Administrador =====
+    const overlay    = document.getElementById('admin-overlay');
+    const btnAdmin   = document.getElementById('btn-admin');
+    const btnCerrar  = document.getElementById('admin-cerrar');
+    const adminForm  = document.getElementById('admin-form');
+    const adminError = document.getElementById('admin-error');
+    const adminOjo   = document.getElementById('admin-ojo');
+    const inputPass  = document.getElementById('admin-password');
+
+    const abrirAdmin = () => {
+      overlay.classList.remove('oculto');
+      overlay.classList.add('admin-overlay--visible');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('admin-email').focus(), 50);
+    };
+
+    const cerrarAdmin = () => {
+      overlay.classList.remove('admin-overlay--visible');
+      setTimeout(() => {
+        overlay.classList.add('oculto');
+        adminForm.reset();
+        adminError.classList.add('oculto');
+      }, 280);
+      document.body.style.overflow = '';
+    };
+
+    btnAdmin.addEventListener('click', abrirAdmin);
+    btnCerrar.addEventListener('click', cerrarAdmin);
+    overlay.addEventListener('click', e => { if (e.target === overlay) cerrarAdmin(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !overlay.classList.contains('oculto')) cerrarAdmin();
+    });
+
+    // Toggle mostrar/ocultar contraseña
+    adminOjo.addEventListener('click', () => {
+      const oculto = inputPass.type === 'password';
+      inputPass.type = oculto ? 'text' : 'password';
+      document.getElementById('ojo-abierto').style.display  = oculto ? 'none'  : 'block';
+      document.getElementById('ojo-cerrado').style.display  = oculto ? 'block' : 'none';
+    });
+
+    // Submit — Supabase Auth
+    let supabaseAdmin = null;
+
+    async function getSupabase() {
+      if (supabaseAdmin) return supabaseAdmin;
+      const res    = await fetch('/api/config');
+      const config = await res.json();
+      supabaseAdmin = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+      return supabaseAdmin;
+    }
+
+    adminForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email    = document.getElementById('admin-email').value.trim();
+      const password = inputPass.value;
+      const btnSubmit = adminForm.querySelector('.admin-modal__btn-submit');
+
+      adminError.classList.add('oculto');
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Verificando...';
+
+      try {
+        const cliente = await getSupabase();
+        const { error } = await cliente.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          adminError.textContent = 'Correo o contraseña incorrectos.';
+          adminError.classList.remove('oculto');
+          return;
+        }
+
+        // Login exitoso — redirigir al dashboard
+        window.location.href = '/admin/dashboard.html';
+
+      } catch (err) {
+        adminError.textContent = 'Error de conexión. Intenta de nuevo.';
+        adminError.classList.remove('oculto');
+        console.error(err);
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Ingresar al panel';
+      }
+    });
+
+    // ===== Año dinámico en el footer =====
+    const yearEl = document.getElementById('footer-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // ===== Animación reveal del footer =====
+    const footerItems = document.querySelectorAll('.footer-reveal');
+    if (footerItems.length) {
+      const footerObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const delay = (entry.target.dataset.delay || 0) * 0.12;
+              entry.target.style.transitionDelay = delay + 's';
+              entry.target.classList.add('is-visible');
+              footerObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      footerItems.forEach(el => footerObserver.observe(el));
+    }
+
+    // ===== Animación reveal de los mapas al hacer scroll =====
+    const mapaPaneles = document.querySelectorAll('.sucursal-card__mapa');
+    if (mapaPaneles.length) {
+      const mapaObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              mapaObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+      mapaPaneles.forEach(panel => mapaObserver.observe(panel));
+    }
+
+    const navbarHeader = document.querySelector('.navbar-header');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbarHeader.classList.add('navbar-header--scrolled');
+      } else {
+        navbarHeader.classList.remove('navbar-header--scrolled');
+      }
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

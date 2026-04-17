@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorador de Piezas — Repuestos Chun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/piezas.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ESTÁTICO ===== -->
+  <header class="piezas-navbar">
+
+    <!-- Zona izquierda: mismo ancho que el sidebar -->
+    <div class="piezas-navbar__izquierda">
+      <a href="/" class="piezas-navbar__volver" title="Volver al inicio">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+      </a>
+      <a href="/" class="piezas-navbar__logo">
+        <img src="/img/logoheader2.png" alt="Repuestos Chun" class="navbar__logo-img" />
+      </a>
+    </div>
+
+    <!-- Links centrales -->
+    <ul class="navbar__lista piezas-navbar__lista">
+      <li><a href="/#productos"  class="navbar__link">Piezas</a></li>
+      <li><a href="/#servicios"  class="navbar__link">Servicios</a></li>
+      <li><a href="/#sucursales" class="navbar__link">Sucursales</a></li>
+    </ul>
+
+    <!-- Botones -->
+    <div class="navbar__acciones">
+      <a href="https://wa.me/18295195473?text=Hola%2C%20me%20interesa%20un%20repuesto.%20%C2%BFMe%20pueden%20ayudar%3F" target="_blank" rel="noopener noreferrer" class="navbar__btn-cta">Contáctanos</a>
+    </div>
+
+  </header>
+
+  <!-- Backdrop del sidebar (mobile) -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- ===== LAYOUT PRINCIPAL ===== -->
+  <div class="piezas-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar__header">
+        <span class="sidebar__header-titulo">Categorías</span>
+        <button class="sidebar__cerrar" id="btn-sidebar-cerrar" aria-label="Cerrar categorías">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar__nav" id="sidebar-nav">
+        <!-- generado por JS -->
+      </nav>
+
+    </aside>
+
+    <!-- CONTENIDO -->
+    <main class="piezas-main">
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb" id="breadcrumb">
+        <a href="/" class="breadcrumb__link">Inicio</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__link" id="bc-categoria" style="display:none"></span>
+        <span class="breadcrumb__sep" id="bc-sep2" style="display:none">›</span>
+        <span class="breadcrumb__actual" id="bc-actual">Explorador de Piezas</span>
+      </div>
+
+      <!-- Título -->
+      <div class="piezas-header">
+        <h1 class="piezas-header__titulo">Explorador de Piezas</h1>
+        <p class="piezas-header__categoria" id="label-categoria"></p>
+      </div>
+
+      <!-- Barra de búsqueda -->
+      <div class="busqueda-piezas" id="busqueda-piezas">
+
+        <!-- Texto libre -->
+        <div class="busqueda-piezas__campo busqueda-piezas__campo--texto">
+          <svg class="busqueda-piezas__icono" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="busq-texto" class="busqueda-piezas__input"
+                 placeholder="Buscar pieza por nombre o descripción..." autocomplete="off" />
+        </div>
+
+        <!-- Modelo de motocicleta -->
+        <div class="busqueda-piezas__campo">
+          <svg class="busqueda-piezas__icono busqueda-piezas__icono--select" xmlns="http://www.w3.org/2000/svg"
+               width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+          </svg>
+          <select id="busq-modelo" class="busqueda-piezas__select busqueda-piezas__select--icono">
+            <option value="">Todos los modelos</option>
+            <!-- poblado por JS -->
+          </select>
+        </div>
+
+        <!-- Sucursal -->
+        <div class="busqueda-piezas__campo">
+          <svg class="busqueda-piezas__icono busqueda-piezas__icono--select" xmlns="http://www.w3.org/2000/svg"
+               width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          <select id="busq-sucursal" class="busqueda-piezas__select busqueda-piezas__select--icono">
+            <option value="">Todas las sucursales</option>
+            <option value="Villa Valdez">Villa Valdez</option>
+            <option value="Villa Fundación">Villa Fundación</option>
+            <option value="Bajos de Haina">Bajos de Haina</option>
+            <option value="Bonao">Bonao</option>
+          </select>
+        </div>
+
+        <!-- Botón abrir categorías (solo mobile) -->
+        <button id="btn-abrir-sidebar" class="busqueda-piezas__filtro-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+          </svg>
+          Categorías
+        </button>
+
+        <!-- Limpiar filtros -->
+        <button id="busq-limpiar" class="busqueda-piezas__limpiar oculto">✕ Limpiar</button>
+
+      </div>
+
+      <!-- Estado: cargando -->
+      <div class="piezas-estado" id="estado-carga">
+        <div class="spinner"></div>
+        <p>Cargando piezas...</p>
+      </div>
+
+      <!-- Estado: vacío -->
+      <div class="piezas-estado oculto" id="estado-vacio">
+        <span style="font-size:2.5rem">🔧</span>
+        <p>No hay piezas disponibles en esta categoría.</p>
+      </div>
+
+      <!-- Grid de productos -->
+      <div class="productos-grid oculto" id="productos-grid"></div>
+
+      <!-- Ver más -->
+      <button class="btn-ver-mas oculto" id="btn-ver-mas">Ver más productos</button>
+
+    </main>
+  </div>
+
+  <script>
+    // ===== DATOS DE CATEGORÍAS Y SUBCATEGORÍAS =====
+    const CATEGORIAS = [
+      {
+        id: 'motor',
+        nombre: 'Motor y Sistema de Combustión',
+        subs: [
+          'Cilindros y Pistones',
+          'Bujías',
+          'Carburador o Sistema de Inyección',
+          'Tanque de combustible',
+          'Filtro de aire',
+          'Sistema de escape (Mofle)',
+        ],
+      },
+      {
+        id: 'transmision',
+        nombre: 'Transmisión',
+        subs: [
+          'Embrague (Clutch)',
+          'Caja de cambios',
+          'Transmisión secundaria',
+        ],
+      },
+      {
+        id: 'chasis',
+        nombre: 'Chasis y Estructura',
+        subs: [
+          'Cuadro / Chasis',
+          'Subchasis',
+          'Basculante (Tijera)',
+          'Pata de cabra y Caballete central',
+        ],
+      },
+      {
+        id: 'suspension',
+        nombre: 'Suspensión',
+        subs: [
+          'Horquilla delantera',
+          'Amortiguador trasero',
+        ],
+      },
+      {
+        id: 'gomas',
+        nombre: 'Ruedas y Frenos',
+        subs: [
+          'Gomas (Neumáticos)',
+          'Aros (Llantas)',
+          'Discos o Tambores de freno',
+          'Pinzas (Cálipers) y Pastillas',
+        ],
+      },
+      {
+        id: 'electrico',
+        nombre: 'Sistema Eléctrico y Luces',
+        subs: [
+          'Batería',
+          'Estator / Alternador',
+          'Faro principal (Luz delantera)',
+          'Direccionales (Intermitentes)',
+          'Luz trasera y de freno',
+          'Tablero de instrumentos',
+        ],
+      },
+      {
+        id: 'control',
+        nombre: 'Controles y Ergonomía',
+        subs: [
+          'Manubrio (Timón)',
+          'Acelerador',
+          'Manetas',
+          'Pedales',
+          'Asiento (Sillín)',
+          'Espejos retrovisores',
+        ],
+      },
+      {
+        id: 'proteccion',
+        nombre: 'Protección Personal',
+        subs: [
+          'Cascos',
+          'Guantes',
+          'Chaquetas y Chalecos',
+          'Botas',
+          'Rodilleras y Coderas',
+          'Trajes completos',
+        ],
+      },
+      {
+        id: 'accesorios',
+        nombre: 'Accesorios',
+        subs: [
+          'Bolsos y Maletas',
+          'Fundas y Cobertores',
+          'Soportes para Celular',
+          'Seguridad (Candados y Alarmas)',
+          'Decoración y Personalización',
+        ],
+      },
+      {
+        id: 'aceites',
+        nombre: 'Aceites y Lubricantes',
+        subs: [
+          'Aceite de Motor',
+          'Líquido de Frenos',
+          'Refrigerante (Coolant)',
+          'Lubricante de Cadena',
+          'Grasa y Selladores',
+        ],
+      },
+      {
+        id: 'otros',
+        nombre: 'Otros',
+        subs: [
+          'Repuestos Varios',
+          'Sin Categoría',
+        ],
+      },
+    ];
+
+    // ===== MODELOS DE MOTOCICLETA =====
+    const ESPECIALES_MOTO = ['Todas las motocicletas', 'Mayoría de motocicletas'];
+    const MODELOS_MOTO = [
+      { marca: 'Super Gato',  modelos: ['CG-150','CG 200 Standard','CG 200 Racing','CG 250','Bengala 250','Frontier 250','LGR 250','GY250','Super Cub 110','RS 150','Pasola 125 Sport','Pasola FS150','Feline Spirit'] },
+      { marca: 'Tauro Turbo', modelos: ['CG 200','CG200 Racing','Super Cub C110','CRX 250','Nitro 125','Elite 110','Lead 125','BZ 150'] },
+      { marca: 'X1000',       modelos: ['CG 125','CG 150 R6','CG 200 R6','CG 250 R6','Diamond 110','T-105','Super Delivery','Steel 150','New Jog 150','Super Jog','Cruise 150','Lead 150','PG 125','Dio','Address 150','BWS 175','XROAD 200','200ZH 5DL','Nova'] },
+      { marca: 'Haojue',      modelos: ['DM-150','KA-150','HJ-125 Sport','Xpress 125','HJ-125','VR-150','VS-125','VN-100'] },
+      { marca: 'Loncin',      modelos: ['CR6 (Loncin 300)','525RR','DS525X'] },
+      { marca: 'Nipponia',    modelos: ['Patrón 125','Magneto XP','VPS125','VRS 150'] },
+      { marca: 'Bajaj',       modelos: ['Boxer MB 150','Platina 100','Platina 125 Pro'] },
+      { marca: 'TVS',         modelos: ['HLX 125','Apache RTR 180','Apache RR 310'] },
+      { marca: 'Hero',        modelos: ['Eco Deluxe','Eco-125','Eco Express'] },
+      { marca: 'Lifan',       modelos: ['Glean 100','K29'] },
+      { marca: 'Yamaha',      modelos: ['Crux','Jog Artística','BWS','RX115','XTZ'] },
+      { marca: 'Suzuki',      modelos: ['Address 125','AX100','GN 125','GD 115 (GD15)'] },
+      { marca: 'Honda',       modelos: ['Super Cub','Navi','CRF 250','Africa Twin','CBR','XR'] },
+      { marca: 'Super Soco',  modelos: ['TC MAX'] },
+      { marca: 'KTM',         modelos: ['Duke 200','Duke 250','Duke 390','RC 390','Adventure 250','690 Enduro R'] },
+      { marca: 'CFMoto',      modelos: ['NK 300','450 SR','675SR-R','800MT-X','MT (Gama General)','Z-Force 1000','Z-Force 950'] },
+      { marca: 'Benelli',     modelos: ['BN 125','302R','Leoncino 500','TRK 502 X'] },
+      { marca: 'Ronco',       modelos: ['GR200'] },
+    ];
+
+    // ===== ESTADO =====
+    const params       = new URLSearchParams(window.location.search);
+    const categoriaId  = params.get('categoria');
+    const subParam     = params.get('sub');
+    let categoriaActual = categoriaId || null;
+    let subActual       = subParam || null;
+    let productosFiltrados = [];
+
+    // ===== CONSTRUIR SIDEBAR =====
+    const nav = document.getElementById('sidebar-nav');
+
+    // Opción "Todos los productos" al tope
+    const todosItem = document.createElement('div');
+    todosItem.className = 'sidebar__item-todos' + (!categoriaActual && !subActual ? ' sidebar__item-todos--activo' : '');
+    todosItem.innerHTML = `<a href="/piezas" class="sidebar__todos-link">Todos los productos</a>`;
+    nav.appendChild(todosItem);
+
+    CATEGORIAS.forEach(cat => {
+      const estaActiva = cat.id === categoriaActual;
+
+      const item = document.createElement('div');
+      item.className = 'sidebar__item' + (estaActiva ? ' sidebar__item--activo' : '');
+      item.dataset.id = cat.id;
+
+      item.innerHTML = `
+        <div class="sidebar__cat-row">
+          <a class="sidebar__cat-nombre ${estaActiva && !subActual ? 'sidebar__cat-nombre--activo' : ''}"
+             href="/piezas?categoria=${cat.id}">${cat.nombre}</a>
+          <button class="sidebar__chevron-btn" aria-label="Expandir">
+            <svg class="sidebar__chevron" xmlns="http://www.w3.org/2000/svg"
+                 width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+        <ul class="sidebar__subs ${estaActiva ? 'sidebar__subs--abierto' : ''}">
+          ${cat.subs.map(s => {
+            const esActiva = s === subActual;
+            const url = `/piezas?categoria=${cat.id}&sub=${encodeURIComponent(s)}`;
+            return `<li>
+              <a class="sidebar__sub-link ${esActiva ? 'sidebar__sub-link--activo' : ''}"
+                 href="${url}">${s}</a>
+            </li>`;
+          }).join('')}
+        </ul>
+      `;
+
+      // Toggle accordion con el chevron (no con el nombre)
+      item.querySelector('.sidebar__chevron-btn').addEventListener('click', () => {
+        const subs = item.querySelector('.sidebar__subs');
+        const abierto = subs.classList.contains('sidebar__subs--abierto');
+        subs.classList.toggle('sidebar__subs--abierto', !abierto);
+        item.classList.toggle('sidebar__item--activo', !abierto);
+      });
+
+      nav.appendChild(item);
+    });
+
+
+    // ===== BREADCRUMB =====
+    if (categoriaActual) {
+      const cat = CATEGORIAS.find(c => c.id === categoriaActual);
+      if (cat) {
+        const bcCat = document.getElementById('bc-categoria');
+        bcCat.textContent = cat.nombre;
+        bcCat.style.display = 'inline';
+        document.getElementById('bc-sep2').style.display = 'inline';
+        document.getElementById('bc-actual').textContent = subActual || cat.nombre;
+        document.getElementById('label-categoria').textContent = subActual
+          ? `${cat.nombre} › ${subActual}`
+          : cat.nombre;
+      }
+    }
+
+    // ===== CARGAR PRODUCTOS =====
+    const POR_PAGINA = 20;
+    let todosLosProductos = [];
+    let todosParaRelacionados = []; // todos sin filtro, para productos relacionados
+    let mostrados = 0;
+
+    function renderizarProductos() {
+      const grid   = document.getElementById('productos-grid');
+      const lote   = productosFiltrados.slice(mostrados, mostrados + POR_PAGINA);
+
+      lote.forEach(p => {
+        const imagenHtml = p.imagen_url
+          ? `<img class="producto-card__imagen" src="${p.imagen_url}" alt="${p.nombre}" loading="lazy" />`
+          : `<div class="producto-card__imagen-placeholder" style="${p.color ? `background:${p.color}` : ''}">⚙️</div>`;
+
+        const precioHtml = p.precio
+          ? `<span class="producto-card__precio">${parseFloat(p.precio).toFixed(2)} DOP</span>`
+          : '';
+
+        const cantidadHtml = p.cantidad !== undefined && p.cantidad !== null
+          ? `<span class="producto-card__cantidad"><span class="producto-card__cantidad-q">Q</span> ${p.cantidad}</span>`
+          : '';
+
+        const card = document.createElement('div');
+        card.className = 'producto-card';
+        card.innerHTML = `
+          <div class="producto-card__imagen-wrapper">${imagenHtml}</div>
+          <div class="producto-card__info">
+            <p class="producto-card__nombre">${p.nombre}</p>
+            <div class="producto-card__footer">
+              ${precioHtml}
+              ${cantidadHtml}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      mostrados += lote.length;
+
+      // Mostrar u ocultar botón "Ver más"
+      const btnVerMas = document.getElementById('btn-ver-mas');
+      if (mostrados >= productosFiltrados.length) {
+        btnVerMas.classList.add('oculto');
+      } else {
+        btnVerMas.classList.remove('oculto');
+      }
+    }
+
+    async function cargarPiezas() {
+      const grid        = document.getElementById('productos-grid');
+      const estadoCarga = document.getElementById('estado-carga');
+      const estadoVacio = document.getElementById('estado-vacio');
+
+      // Datos mock para previsualización (se reemplazará con la API real)
+      const MOCK = [
+        {
+          nombre: 'Set de Cilindros',
+          precio: 450.00,
+          cantidad: 12,
+          imagen_url: '/img/producto1.png',
+          imagenes: ['/img/producto1.png', '/img/producto2.png', '/img/producto3.png'],
+          descripcion: 'Set completo de cilindros de alta resistencia para motocicleta. Fabricados con aleación de aluminio de grado industrial, garantizan un rendimiento óptimo y mayor durabilidad ante las altas temperaturas del motor.',
+          categoriaId: 'motor',
+          categoria: 'Motor y Sistema de Combustión',
+          subcategoria: 'Cilindros y Pistones',
+          modelos_compatibles: ['Honda CB 150', 'Yamaha FZ 16', 'Suzuki GS 150', 'Bajaj Pulsar 180'],
+        },
+        { nombre: 'Bujía Iridium NGK',       precio: 85.00,   cantidad: 34, color: '#1a3a5c', categoriaId: 'motor',       categoria: 'Motor y Sistema de Combustión', subcategoria: 'Bujías',                          descripcion: 'Bujía de iridio de alta durabilidad para encendido preciso y eficiente.' },
+        { nombre: 'Filtro de Aire K&N',       precio: 320.00,  cantidad: 8,  color: '#3a1a1a', categoriaId: 'motor',       categoria: 'Motor y Sistema de Combustión', subcategoria: 'Filtro de aire',                  descripcion: 'Filtro de alto flujo lavable y reutilizable, aumenta la potencia del motor.' },
+        { nombre: 'Kit de Embrague',           precio: 680.00,  cantidad: 5,  color: '#1a3a1a', categoriaId: 'transmision', categoria: 'Transmisión',                    subcategoria: 'Embrague (Clutch)',               descripcion: 'Kit completo de embrague con platos de fricción reforzados.' },
+        { nombre: 'Cadena DID 428',            precio: 210.00,  cantidad: 20, color: '#2a2a1a', categoriaId: 'transmision', categoria: 'Transmisión',                    subcategoria: 'Transmisión secundaria',         descripcion: 'Cadena de transmisión reforzada con sellante O-ring para mayor duración.' },
+        { nombre: 'Amortiguador Trasero YSS',  precio: 1200.00, cantidad: 3,  color: '#1a1a3a', categoriaId: 'suspension',  categoria: 'Suspensión',                     subcategoria: 'Amortiguador trasero',            descripcion: 'Amortiguador ajustable de alto rendimiento para mayor confort y control.' },
+        { nombre: 'Horquilla Delantera',       precio: 2800.00, cantidad: 2,  color: '#2a1a3a', categoriaId: 'suspension',  categoria: 'Suspensión',                     subcategoria: 'Horquilla delantera',             descripcion: 'Juego completo de horquilla delantera con resortes progresivos.' },
+        { nombre: 'Pastillas de Freno EBC',    precio: 175.00,  cantidad: 15, color: '#3a2a1a', categoriaId: 'gomas',       categoria: 'Ruedas y Frenos',                subcategoria: 'Pinzas (Cálipers) y Pastillas',  descripcion: 'Pastillas de freno sinterizadas para mayor potencia de frenado.' },
+        { nombre: 'Disco de Freno Galfer',     precio: 540.00,  cantidad: 7,  color: '#1a2a2a', categoriaId: 'gomas',       categoria: 'Ruedas y Frenos',                subcategoria: 'Discos o Tambores de freno',      descripcion: 'Disco de freno flotante de acero inoxidable con perforaciones anticalor.' },
+        { nombre: 'Batería Yuasa 12V',         precio: 890.00,  cantidad: 6,  color: '#3a1a2a', categoriaId: 'electrico',   categoria: 'Sistema Eléctrico y Luces',      subcategoria: 'Batería',                         descripcion: 'Batería de gel libre de mantenimiento con alta capacidad de arranque en frío.' },
+        { nombre: 'Tablero Digital Universal', precio: 1450.00, cantidad: 4,  color: '#1a2a3a', categoriaId: 'electrico',   categoria: 'Sistema Eléctrico y Luces',      subcategoria: 'Tablero de instrumentos',         descripcion: 'Tablero digital multifunción con velocímetro, tacómetro y indicador de combustible.' },
+        { nombre: 'Manubrio Renthal',          precio: 380.00,  cantidad: 9,  color: '#2a1a2a', categoriaId: 'control',     categoria: 'Controles y Ergonomía',          subcategoria: 'Manubrio (Timón)',                descripcion: 'Manubrio de aluminio aeronáutico ultraligero con acabado anodizado.' },
+      ];
+
+      try {
+        const cat = CATEGORIAS.find(c => c.id === categoriaActual);
+        let url = '/api/products';
+        if (cat) {
+          url += `?categoria=${encodeURIComponent(subActual || cat.nombre)}`;
+        }
+
+        let datos;
+        try {
+          const respuesta = await fetch(url);
+          if (!respuesta.ok) throw new Error();
+          datos = await respuesta.json();
+          if (!datos.length) throw new Error();
+          todosParaRelacionados = datos;
+        } catch {
+          todosParaRelacionados = MOCK;
+          // Filtrar MOCK según categoría y subcategoría activas
+          if (subActual) {
+            datos = MOCK.filter(p => p.subcategoria === subActual);
+          } else if (categoriaActual) {
+            datos = MOCK.filter(p => p.categoriaId === categoriaActual);
+          } else {
+            datos = MOCK;
+          }
+        }
+        todosLosProductos = datos;
+        productosFiltrados = [...datos];
+
+        estadoCarga.classList.add('oculto');
+
+        if (!todosLosProductos.length) {
+          estadoVacio.classList.remove('oculto');
+          return;
+        }
+
+        aplicarFiltros();
+
+      } catch (err) {
+        estadoCarga.classList.add('oculto');
+        estadoVacio.classList.remove('oculto');
+        console.error(err);
+      }
+    }
+
+    document.getElementById('btn-ver-mas').addEventListener('click', renderizarProductos);
+
+    // ===== BÚSQUEDA Y FILTROS =====
+
+    /**
+     * Pobla el select de modelos de moto con todos los modelos disponibles.
+     */
+    function poblarSelectModelos() {
+      const select = document.getElementById('busq-modelo');
+      if (!select) return;
+
+      // Opciones especiales
+      const grpEsp = document.createElement('optgroup');
+      grpEsp.label = 'General';
+      ESPECIALES_MOTO.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e;
+        opt.textContent = e;
+        grpEsp.appendChild(opt);
+      });
+      select.appendChild(grpEsp);
+
+      // Marcas y modelos
+      MODELOS_MOTO.forEach(({ marca, modelos }) => {
+        const grp = document.createElement('optgroup');
+        grp.label = marca;
+        modelos.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = `${marca} ${m}`;
+          opt.textContent = m;
+          grp.appendChild(opt);
+        });
+        select.appendChild(grp);
+      });
+    }
+
+    /**
+     * Filtra todosLosProductos según texto, modelo y sucursal activos.
+     * Resetea la paginación y re-renderiza el grid.
+     */
+    function aplicarFiltros() {
+      const texto    = (document.getElementById('busq-texto')?.value || '').toLowerCase().trim();
+      const modelo   = document.getElementById('busq-modelo')?.value || '';
+      const sucursal = document.getElementById('busq-sucursal')?.value || '';
+      const grid     = document.getElementById('productos-grid');
+
+      productosFiltrados = todosLosProductos.filter(p => {
+        // Filtro de texto: nombre, descripción, categoría
+        if (texto) {
+          const enNombre = (p.nombre || '').toLowerCase().includes(texto);
+          const enDesc   = (p.descripcion || '').toLowerCase().includes(texto);
+          const enCat    = (p.categoria || '').toLowerCase().includes(texto);
+          if (!enNombre && !enDesc && !enCat) return false;
+        }
+        // Filtro de modelo de moto
+        if (modelo) {
+          const modeloGuardado = (p.modelo_moto || '').toLowerCase();
+          if (!modeloGuardado.includes(modelo.toLowerCase())) return false;
+        }
+        // Filtro de sucursal
+        if (sucursal) {
+          const sucursales = Array.isArray(p.sucursales) ? p.sucursales : [];
+          if (!sucursales.includes(sucursal)) return false;
+        }
+        return true;
+      });
+
+      // Resetear paginación y re-renderizar
+      mostrados = 0;
+      grid.innerHTML = '';
+
+      const estadoVacio = document.getElementById('estado-vacio');
+      if (!productosFiltrados.length) {
+        estadoVacio.classList.remove('oculto');
+        grid.classList.add('oculto');
+        document.getElementById('btn-ver-mas').classList.add('oculto');
+      } else {
+        estadoVacio.classList.add('oculto');
+        grid.classList.remove('oculto');
+        renderizarProductos();
+      }
+
+      // Mostrar/ocultar botón limpiar
+      const hayFiltros = texto || modelo || sucursal;
+      document.getElementById('busq-limpiar')?.classList.toggle('oculto', !hayFiltros);
+    }
+
+    // Inicializar el select de modelos
+    poblarSelectModelos();
+
+    // Eventos de búsqueda con debounce en texto libre
+    let debounceTimer;
+    document.getElementById('busq-texto')?.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(aplicarFiltros, 280);
+    });
+    document.getElementById('busq-modelo')?.addEventListener('change', aplicarFiltros);
+    document.getElementById('busq-sucursal')?.addEventListener('change', aplicarFiltros);
+
+    // Limpiar todos los filtros
+    document.getElementById('busq-limpiar')?.addEventListener('click', () => {
+      document.getElementById('busq-texto').value = '';
+      document.getElementById('busq-modelo').value = '';
+      document.getElementById('busq-sucursal').value = '';
+      aplicarFiltros();
+    });
+
+    // ===== MODAL DE PRODUCTO =====
+    function abrirModal(p) {
+      const imagenes = p.imagenes || (p.imagen_url ? [p.imagen_url] : []);
+      let imgActiva = 0;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-producto-overlay';
+      // Productos relacionados (4 aleatorios excluyendo el actual)
+      const relacionados = todosParaRelacionados
+        .filter(r => r.nombre !== p.nombre)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 4);
+
+      overlay.innerHTML = `
+        <div class="modal-producto">
+
+          <!-- Cerrar -->
+          <button class="modal-producto__cerrar" id="mp-cerrar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+
+          <!-- Contenido principal: galería + info -->
+          <div class="modal-producto__main">
+
+          <!-- Izquierda: galería -->
+          <div class="modal-producto__galeria">
+            <div class="modal-producto__img-principal-wrapper">
+              <img class="modal-producto__img-principal" id="mp-img-principal"
+                   src="${imagenes[0] || ''}" alt="${p.nombre}" />
+              ${imagenes.length > 1 ? `
+              <button class="modal-producto__flecha modal-producto__flecha--prev" id="mp-prev" aria-label="Imagen anterior">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <button class="modal-producto__flecha modal-producto__flecha--next" id="mp-next" aria-label="Imagen siguiente">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>` : ''}
+            </div>
+            <div class="modal-producto__thumbnails" id="mp-thumbs">
+              ${imagenes.map((img, i) => `
+                <button class="modal-producto__thumb ${i === 0 ? 'modal-producto__thumb--activo' : ''}"
+                        data-idx="${i}">
+                  <img src="${img}" alt="Vista ${i + 1}" />
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Derecha: info -->
+          <div class="modal-producto__info">
+
+            <p class="modal-producto__categoria">${p.subcategoria || p.categoria || ''}</p>
+            <h2 class="modal-producto__nombre">${p.nombre}</h2>
+
+            <div class="modal-producto__precio-row">
+              <span class="modal-producto__precio">${parseFloat(p.precio || 0).toFixed(2)} DOP</span>
+              ${p.cantidad !== undefined ? `<span class="modal-producto__cantidad"><span class="modal-producto__cantidad-q">Cantidad Disponible</span> ${p.cantidad}</span>` : ''}
+            </div>
+
+            ${p.modelos_compatibles?.length ? `
+            <div class="modal-producto__modelos-row">
+              <span class="modal-producto__modelos-label">Compatible con</span>
+              <div class="modal-producto__modelos-lista">
+                ${p.modelos_compatibles.map(m => `<span class="modal-producto__modelo">${m}</span>`).join('')}
+              </div>
+            </div>` : ''}
+
+            <!-- Tabs -->
+            <div class="modal-producto__tabs">
+              <button class="modal-producto__tab modal-producto__tab--activo" data-tab="descripcion">Descripción</button>
+              <button class="modal-producto__tab" data-tab="fotos">Fotos</button>
+            </div>
+
+            <div class="modal-producto__tab-contenido" id="mp-tab-descripcion">
+              <p class="modal-producto__descripcion">${p.descripcion || 'Sin descripción disponible.'}</p>
+            </div>
+
+            <div class="modal-producto__tab-contenido oculto" id="mp-tab-fotos">
+              <div class="modal-producto__fotos-grid">
+                ${imagenes.map(img => `<img src="${img}" alt="${p.nombre}" />`).join('')}
+              </div>
+            </div>
+
+            <!-- Botón contacto -->
+            <a href="https://wa.me/18295195473?text=Hola%2C%20me%20interesa%20un%20repuesto.%20%C2%BFMe%20pueden%20ayudar%3F" target="_blank" rel="noopener noreferrer" class="modal-producto__btn-contacto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.18 2.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+              Consultar disponibilidad
+            </a>
+
+          </div>
+
+          </div><!-- fin modal-producto__main -->
+
+          <!-- Productos relacionados -->
+          ${relacionados.length ? `
+          <div class="modal-producto__relacionados">
+            <h3 class="modal-producto__relacionados-titulo">Productos Relacionados</h3>
+            <div class="modal-producto__relacionados-grid">
+              ${relacionados.map((r, i) => {
+                const imgHtml = r.imagen_url
+                  ? `<img src="${r.imagen_url}" alt="${r.nombre}" />`
+                  : `<div class="rel-card__placeholder" style="${r.color ? `background:${r.color}` : ''}">⚙️</div>`;
+                return `
+                  <button class="rel-card" data-rel-idx="${i}">
+                    <div class="rel-card__img">${imgHtml}</div>
+                    <p class="rel-card__nombre">${r.nombre}</p>
+                    <p class="rel-card__precio">${parseFloat(r.precio || 0).toFixed(2)} DOP</p>
+                  </button>`;
+              }).join('')}
+            </div>
+          </div>` : ''}
+
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+      document.body.style.overflow = 'hidden';
+
+      // Zoom en imagen principal
+      overlay.querySelector('#mp-img-principal').addEventListener('click', () => {
+        const src = overlay.querySelector('#mp-img-principal').src;
+        const zoom = document.createElement('div');
+        zoom.className = 'modal-zoom';
+        zoom.innerHTML = `<img class="modal-zoom__img" src="${src}" alt="${p.nombre}" />`;
+        document.body.appendChild(zoom);
+
+        requestAnimationFrame(() => zoom.classList.add('modal-zoom--visible'));
+
+        const cerrarZoom = () => {
+          zoom.classList.remove('modal-zoom--visible');
+          setTimeout(() => zoom.remove(), 250);
+        };
+        zoom.addEventListener('click', cerrarZoom);
+        document.addEventListener('keydown', function esc(e) {
+          if (e.key === 'Escape') { cerrarZoom(); document.removeEventListener('keydown', esc); }
+        });
+      });
+
+      // Función centralizada para ir a una imagen específica
+      function irAImagen(idx) {
+        imgActiva = (idx + imagenes.length) % imagenes.length;
+        overlay.querySelector('#mp-img-principal').src = imagenes[imgActiva];
+        overlay.querySelectorAll('.modal-producto__thumb').forEach((b, i) => {
+          b.classList.toggle('modal-producto__thumb--activo', i === imgActiva);
+        });
+      }
+
+      // Thumbnails
+      overlay.querySelectorAll('.modal-producto__thumb').forEach(btn => {
+        btn.addEventListener('click', () => irAImagen(parseInt(btn.dataset.idx)));
+      });
+
+      // Flechas prev / next (mobile carousel)
+      overlay.querySelector('#mp-prev')?.addEventListener('click', () => irAImagen(imgActiva - 1));
+      overlay.querySelector('#mp-next')?.addEventListener('click', () => irAImagen(imgActiva + 1));
+
+      // Tabs
+      overlay.querySelectorAll('.modal-producto__tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          overlay.querySelectorAll('.modal-producto__tab').forEach(t => t.classList.remove('modal-producto__tab--activo'));
+          overlay.querySelectorAll('.modal-producto__tab-contenido').forEach(c => c.classList.add('oculto'));
+          tab.classList.add('modal-producto__tab--activo');
+          overlay.querySelector(`#mp-tab-${tab.dataset.tab}`).classList.remove('oculto');
+        });
+      });
+
+      // Cerrar
+      const cerrar = () => {
+        overlay.classList.add('modal-producto-overlay--salir');
+        setTimeout(() => { overlay.remove(); document.body.style.overflow = ''; }, 300);
+      };
+      overlay.querySelector('#mp-cerrar').addEventListener('click', cerrar);
+      overlay.addEventListener('click', e => { if (e.target === overlay) cerrar(); });
+
+      // Click en productos relacionados
+      overlay.querySelectorAll('.rel-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.relIdx);
+          const productoRel = relacionados[idx];
+          cerrar();
+          setTimeout(() => abrirModal(productoRel), 310);
+        });
+      });
+    }
+
+    // Delegar click en tarjetas
+    document.getElementById('productos-grid').addEventListener('click', e => {
+      const card = e.target.closest('.producto-card');
+      if (!card) return;
+      const idx = Array.from(document.querySelectorAll('.producto-card')).indexOf(card);
+      if (todosLosProductos[idx]) abrirModal(todosLosProductos[idx]);
+    });
+
+    cargarPiezas();
+
+    // ===== SIDEBAR DRAWER (MOBILE) =====
+    (function () {
+      const sidebar  = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const btnAbrir  = document.getElementById('btn-abrir-sidebar');
+      const btnCerrar = document.getElementById('btn-sidebar-cerrar');
+
+      function abrirSidebar() {
+        sidebar.classList.add('sidebar--abierto');
+        backdrop.classList.add('sidebar-backdrop--visible');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function cerrarSidebar() {
+        sidebar.classList.remove('sidebar--abierto');
+        backdrop.classList.remove('sidebar-backdrop--visible');
+        document.body.style.overflow = '';
+      }
+
+      btnAbrir?.addEventListener('click', abrirSidebar);
+      btnCerrar?.addEventListener('click', cerrarSidebar);
+      backdrop?.addEventListener('click', cerrarSidebar);
+
+      // Cerrar al seleccionar una categoría o subcategoría en mobile
+      sidebar?.addEventListener('click', e => {
+        if (window.innerWidth <= 768 && e.target.closest('a')) {
+          cerrarSidebar();
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
