@@ -68,8 +68,8 @@ if (formularioLogin) {
       window.location.href = '/admin/dashboard.html';
 
     } catch (err) {
-      console.error('Error al iniciar sesión:', err.message);
-      alertaError.textContent = 'Error de conexión. Intenta de nuevo.';
+      console.error('Error al iniciar sesión:', err);
+      alertaError.textContent = `Error: ${err.message}`;
       alertaError.classList.remove('oculto');
     } finally {
       btnLogin.disabled = false;
