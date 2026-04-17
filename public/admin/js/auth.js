@@ -1,29 +1,24 @@
 /**
- * auth.js — Lógica de autenticación del panel de administración.
- * Utiliza Supabase Auth para login, logout y verificación de sesión.
+ * auth.js — Autenticación del panel de administración via Supabase Auth.
+ * Conexión directa al SDK de Supabase (sin backend intermedio).
  */
 
-// Cliente de Supabase (se inicializa después de obtener la config del servidor)
+const SUPABASE_URL      = 'https://cbredsjpfrcqmjwizhif.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Skb4lgbOKw2IIkgOPw_vGQ_5bTwC6TM';
+
 let supabaseClient = null;
 
 /**
- * Inicializa el cliente de Supabase con la config del servidor.
- * @returns {Promise<Object>} - Cliente de Supabase listo para usar
+ * Inicializa y retorna el cliente de Supabase (singleton).
  */
 async function inicializarSupabase() {
   if (supabaseClient) return supabaseClient;
-
-  const respuesta = await fetch('/api/config');
-  const config = await respuesta.json();
-
-  supabaseClient = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   return supabaseClient;
 }
 
 /**
- * Retorna el token JWT de la sesión actual.
- * Útil para incluirlo en requests al backend.
- * @returns {Promise<string|null>}
+ * Retorna el token JWT de la sesión activa.
  */
 async function obtenerToken() {
   const cliente = await inicializarSupabase();
@@ -47,9 +42,9 @@ if (formularioLogin) {
   formularioLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email    = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const btnLogin = document.getElementById('btn-login');
+    const email       = document.getElementById('email').value.trim();
+    const password    = document.getElementById('password').value;
+    const btnLogin    = document.getElementById('btn-login');
     const alertaError = document.getElementById('alerta-error');
 
     alertaError.classList.add('oculto');
@@ -70,7 +65,6 @@ if (formularioLogin) {
         return;
       }
 
-      // Login exitoso → redirigir al dashboard
       window.location.href = '/admin/dashboard.html';
 
     } catch (err) {
@@ -88,7 +82,6 @@ if (formularioLogin) {
 const btnLogout = document.getElementById('btn-logout');
 
 if (btnLogout) {
-  // Verificar que hay sesión activa al cargar el dashboard
   (async () => {
     const cliente = await inicializarSupabase();
     const { data: { session } } = await cliente.auth.getSession();
@@ -98,14 +91,12 @@ if (btnLogout) {
       return;
     }
 
-    // Mostrar email del usuario en el navbar
     const navbarUsuario = document.getElementById('navbar-usuario');
     if (navbarUsuario) {
       navbarUsuario.textContent = session.user.email;
     }
   })();
 
-  // Botón de cerrar sesión
   btnLogout.addEventListener('click', async () => {
     const cliente = await inicializarSupabase();
     await cliente.auth.signOut();

@@ -133,14 +133,13 @@ async function cargarProductos() {
   mostrarEstado('carga');
 
   try {
-    const token = await obtenerToken();
-    const respuesta = await fetch('/api/products/admin', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const cliente = await inicializarSupabase();
+    const { data: productos, error } = await cliente
+      .from('productos')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    if (!respuesta.ok) throw new Error('Error al cargar productos.');
-
-    const productos = await respuesta.json();
+    if (error) throw new Error(error.message);
     renderizarTabla(productos);
 
     const total = productos.length;
@@ -348,7 +347,7 @@ productoForm?.addEventListener('submit', async (e) => {
   btnGuardar.textContent = 'Guardando...';
 
   try {
-    const token = await obtenerToken();
+    const cliente    = await inicializarSupabase();
     const modeloMoto = modelosSeleccionados.join(', ') || null;
     const sucursales = obtenerSucursalesSeleccionadas();
     const cuerpo = {
@@ -360,23 +359,14 @@ productoForm?.addEventListener('submit', async (e) => {
       sucursales: sucursales.length ? sucursales : null,
     };
 
-    const url    = modoEdicion ? `/api/products/${id}` : '/api/products';
-    const metodo = modoEdicion ? 'PUT' : 'POST';
-
-    const respuesta = await fetch(url, {
-      method: metodo,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(cuerpo),
-    });
-
-    const resultado = await respuesta.json();
-
-    if (!respuesta.ok) {
-      throw new Error(resultado.error || 'Error al guardar el producto.');
+    let error;
+    if (modoEdicion) {
+      ({ error } = await cliente.from('productos').update(cuerpo).eq('id', id));
+    } else {
+      ({ error } = await cliente.from('productos').insert(cuerpo));
     }
+
+    if (error) throw new Error(error.message);
 
     formExito.textContent = modoEdicion ? 'Producto actualizado correctamente.' : 'Producto creado correctamente.';
     formExito.classList.remove('oculto');
@@ -419,16 +409,13 @@ document.getElementById('btn-confirmar-eliminar')?.addEventListener('click', asy
   btnConfirmar.textContent = 'Eliminando...';
 
   try {
-    const token = await obtenerToken();
-    const respuesta = await fetch(`/api/products/${productoAEliminar.id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const cliente = await inicializarSupabase();
+    const { error } = await cliente
+      .from('productos')
+      .delete()
+      .eq('id', productoAEliminar.id);
 
-    if (!respuesta.ok) {
-      const resultado = await respuesta.json();
-      throw new Error(resultado.error || 'Error al eliminar el producto.');
-    }
+    if (error) throw new Error(error.message);
 
     modalConfirmar.classList.add('oculto');
     productoAEliminar = null;
@@ -575,22 +562,17 @@ function abrirModalDetalle(p) {
 async function toggleDisponible(id, nuevoValor, inputEl) {
   inputEl.disabled = true;
   try {
-    const token = await obtenerToken();
-    const respuesta = await fetch(`/api/products/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ disponible: nuevoValor }),
-    });
-    if (!respuesta.ok) {
-      const r = await respuesta.json();
-      inputEl.checked = !nuevoValor; // revertir
-      console.error('Error al cambiar visibilidad:', r.error);
+    const cliente = await inicializarSupabase();
+    const { error } = await cliente
+      .from('productos')
+      .update({ disponible: nuevoValor })
+      .eq('id', id);
+    if (error) {
+      inputEl.checked = !nuevoValor;
+      console.error('Error al cambiar visibilidad:', error.message);
     }
   } catch (err) {
-    inputEl.checked = !nuevoValor; // revertir
+    inputEl.checked = !nuevoValor;
     console.error('Error al cambiar visibilidad:', err.message);
   } finally {
     inputEl.disabled = false;

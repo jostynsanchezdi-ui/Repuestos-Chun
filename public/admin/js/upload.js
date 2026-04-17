@@ -77,41 +77,37 @@ async function procesarSlot(idx, archivo) {
   document.getElementById(`upload-preview-${idx}`).classList.remove('oculto');
 
   // Barra de progreso
-  mostrarProgreso(20, `Procesando imagen ${idx + 1}...`);
+  mostrarProgreso(20, `Subiendo imagen ${idx + 1}...`);
 
   try {
-    const token = await obtenerToken();
-    if (!token) { window.location.href = '/admin/'; return; }
+    const cliente = await inicializarSupabase();
+    const ext      = archivo.name.split('.').pop().toLowerCase();
+    const fileName = `originals/${Date.now()}-slot${idx}.${ext}`;
 
-    mostrarProgreso(45, `Subiendo imagen ${idx + 1}...`);
+    mostrarProgreso(50, 'Subiendo a Supabase...');
 
-    const formData = new FormData();
-    formData.append('imagen', archivo);
+    const { error: uploadError } = await cliente.storage
+      .from('product-images')
+      .upload(fileName, archivo, { contentType: archivo.type, upsert: false });
 
-    const respuesta = await fetch('/api/images/process', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+    if (uploadError) throw new Error(uploadError.message);
 
-    mostrarProgreso(85, 'Finalizando...');
-    const resultado = await respuesta.json();
+    mostrarProgreso(85, 'Obteniendo URL...');
 
-    if (!respuesta.ok) throw new Error(resultado.error || 'Error al procesar la imagen.');
+    const { data: { publicUrl } } = cliente.storage
+      .from('product-images')
+      .getPublicUrl(fileName);
 
-    // Guardar URL procesada
-    imagenesUrls[idx] = resultado.url;
-    document.getElementById(`upload-img-${idx}`).src = resultado.url;
-
-    // campo-imagen-url siempre refleja la primera imagen disponible
+    imagenesUrls[idx] = publicUrl;
+    document.getElementById(`upload-img-${idx}`).src = publicUrl;
     sincronizarCampoUrl();
 
-    mostrarProgreso(100, '✓ Imagen procesada');
+    mostrarProgreso(100, '✓ Imagen subida');
     setTimeout(() => ocultarProgreso(), 1500);
 
   } catch (err) {
-    console.error('Error al procesar imagen:', err.message);
-    mostrarErrorForm(err.message || 'Error al procesar la imagen. Intenta de nuevo.');
+    console.error('Error al subir imagen:', err.message);
+    mostrarErrorForm(err.message || 'Error al subir la imagen. Intenta de nuevo.');
     quitarSlot(idx);
   }
 }
