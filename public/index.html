@@ -822,9 +822,10 @@
 
     async function getSupabase() {
       if (supabaseAdmin) return supabaseAdmin;
-      const res    = await fetch('/api/config');
-      const config = await res.json();
-      supabaseAdmin = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+      supabaseAdmin = window.supabase.createClient(
+        'https://cbredsjpfrcqmjwizhif.supabase.co',
+        'sb_publishable_Skb4lgbOKw2IIkgOPw_vGQ_5bTwC6TM'
+      );
       return supabaseAdmin;
     }
 
@@ -853,7 +854,7 @@
         window.location.href = '/admin/dashboard.html';
 
       } catch (err) {
-        adminError.textContent = 'Error de conexión. Intenta de nuevo.';
+        adminError.textContent = `Error: ${err.message}`;
         adminError.classList.remove('oculto');
         console.error(err);
       } finally {
