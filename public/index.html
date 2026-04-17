@@ -661,6 +661,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // Redirigir al reset-password si Supabase envía token de recuperación aquí
+    if (window.location.hash.includes('type=recovery')) {
+      window.location.replace('/admin/reset-password' + window.location.hash);
+    }
+
     // ===== Pantalla de carga =====
     window.addEventListener('load', () => {
       const pantalla = document.getElementById('pantalla-carga');
