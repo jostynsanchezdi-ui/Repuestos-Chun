@@ -18,6 +18,11 @@
   to = "/admin/dashboard.html"
   status = 200
 
+[[redirects]]
+  from = "/admin/reset-password"
+  to = "/admin/reset-password.html"
+  status = 200
+
 # Fallback 404
 [[redirects]]
   from = "/*"
