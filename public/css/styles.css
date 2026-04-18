@@ -1883,12 +1883,7 @@ body {
 
 @media (max-width: 600px) {
   .footer-principal__columnas {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 380px) {
-  .footer-principal__columnas {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
 }
