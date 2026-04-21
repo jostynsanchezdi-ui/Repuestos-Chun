@@ -164,6 +164,7 @@
     </main>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ===== DATOS DE CATEGORÍAS Y SUBCATEGORÍAS =====
     const CATEGORIAS = [
@@ -436,60 +437,31 @@
       const estadoCarga = document.getElementById('estado-carga');
       const estadoVacio = document.getElementById('estado-vacio');
 
-      // Datos mock para previsualización (se reemplazará con la API real)
-      const MOCK = [
-        {
-          nombre: 'Set de Cilindros',
-          precio: 450.00,
-          cantidad: 12,
-          imagen_url: '/img/producto1.png',
-          imagenes: ['/img/producto1.png', '/img/producto2.png', '/img/producto3.png'],
-          descripcion: 'Set completo de cilindros de alta resistencia para motocicleta. Fabricados con aleación de aluminio de grado industrial, garantizan un rendimiento óptimo y mayor durabilidad ante las altas temperaturas del motor.',
-          categoriaId: 'motor',
-          categoria: 'Motor y Sistema de Combustión',
-          subcategoria: 'Cilindros y Pistones',
-          modelos_compatibles: ['Honda CB 150', 'Yamaha FZ 16', 'Suzuki GS 150', 'Bajaj Pulsar 180'],
-        },
-        { nombre: 'Bujía Iridium NGK',       precio: 85.00,   cantidad: 34, color: '#1a3a5c', categoriaId: 'motor',       categoria: 'Motor y Sistema de Combustión', subcategoria: 'Bujías',                          descripcion: 'Bujía de iridio de alta durabilidad para encendido preciso y eficiente.' },
-        { nombre: 'Filtro de Aire K&N',       precio: 320.00,  cantidad: 8,  color: '#3a1a1a', categoriaId: 'motor',       categoria: 'Motor y Sistema de Combustión', subcategoria: 'Filtro de aire',                  descripcion: 'Filtro de alto flujo lavable y reutilizable, aumenta la potencia del motor.' },
-        { nombre: 'Kit de Embrague',           precio: 680.00,  cantidad: 5,  color: '#1a3a1a', categoriaId: 'transmision', categoria: 'Transmisión',                    subcategoria: 'Embrague (Clutch)',               descripcion: 'Kit completo de embrague con platos de fricción reforzados.' },
-        { nombre: 'Cadena DID 428',            precio: 210.00,  cantidad: 20, color: '#2a2a1a', categoriaId: 'transmision', categoria: 'Transmisión',                    subcategoria: 'Transmisión secundaria',         descripcion: 'Cadena de transmisión reforzada con sellante O-ring para mayor duración.' },
-        { nombre: 'Amortiguador Trasero YSS',  precio: 1200.00, cantidad: 3,  color: '#1a1a3a', categoriaId: 'suspension',  categoria: 'Suspensión',                     subcategoria: 'Amortiguador trasero',            descripcion: 'Amortiguador ajustable de alto rendimiento para mayor confort y control.' },
-        { nombre: 'Horquilla Delantera',       precio: 2800.00, cantidad: 2,  color: '#2a1a3a', categoriaId: 'suspension',  categoria: 'Suspensión',                     subcategoria: 'Horquilla delantera',             descripcion: 'Juego completo de horquilla delantera con resortes progresivos.' },
-        { nombre: 'Pastillas de Freno EBC',    precio: 175.00,  cantidad: 15, color: '#3a2a1a', categoriaId: 'gomas',       categoria: 'Ruedas y Frenos',                subcategoria: 'Pinzas (Cálipers) y Pastillas',  descripcion: 'Pastillas de freno sinterizadas para mayor potencia de frenado.' },
-        { nombre: 'Disco de Freno Galfer',     precio: 540.00,  cantidad: 7,  color: '#1a2a2a', categoriaId: 'gomas',       categoria: 'Ruedas y Frenos',                subcategoria: 'Discos o Tambores de freno',      descripcion: 'Disco de freno flotante de acero inoxidable con perforaciones anticalor.' },
-        { nombre: 'Batería Yuasa 12V',         precio: 890.00,  cantidad: 6,  color: '#3a1a2a', categoriaId: 'electrico',   categoria: 'Sistema Eléctrico y Luces',      subcategoria: 'Batería',                         descripcion: 'Batería de gel libre de mantenimiento con alta capacidad de arranque en frío.' },
-        { nombre: 'Tablero Digital Universal', precio: 1450.00, cantidad: 4,  color: '#1a2a3a', categoriaId: 'electrico',   categoria: 'Sistema Eléctrico y Luces',      subcategoria: 'Tablero de instrumentos',         descripcion: 'Tablero digital multifunción con velocímetro, tacómetro y indicador de combustible.' },
-        { nombre: 'Manubrio Renthal',          precio: 380.00,  cantidad: 9,  color: '#2a1a2a', categoriaId: 'control',     categoria: 'Controles y Ergonomía',          subcategoria: 'Manubrio (Timón)',                descripcion: 'Manubrio de aluminio aeronáutico ultraligero con acabado anodizado.' },
-      ];
-
       try {
+        const sbClient = window.supabase.createClient(
+          'https://cbredsjpfrcqmjwizhif.supabase.co',
+          'sb_publishable_Skb4lgbOKw2IIkgOPw_vGQ_5bTwC6TM'
+        );
+
+        let query = sbClient
+          .from('productos')
+          .select('*')
+          .eq('disponible', true)
+          .order('created_at', { ascending: false });
+
         const cat = CATEGORIAS.find(c => c.id === categoriaActual);
-        let url = '/api/products';
-        if (cat) {
-          url += `?categoria=${encodeURIComponent(subActual || cat.nombre)}`;
+        if (subActual) {
+          query = query.eq('subcategoria', subActual);
+        } else if (cat) {
+          query = query.eq('categoria', cat.nombre);
         }
 
-        let datos;
-        try {
-          const respuesta = await fetch(url);
-          if (!respuesta.ok) throw new Error();
-          datos = await respuesta.json();
-          if (!datos.length) throw new Error();
-          todosParaRelacionados = datos;
-        } catch {
-          todosParaRelacionados = MOCK;
-          // Filtrar MOCK según categoría y subcategoría activas
-          if (subActual) {
-            datos = MOCK.filter(p => p.subcategoria === subActual);
-          } else if (categoriaActual) {
-            datos = MOCK.filter(p => p.categoriaId === categoriaActual);
-          } else {
-            datos = MOCK;
-          }
-        }
-        todosLosProductos = datos;
-        productosFiltrados = [...datos];
+        const { data: datos, error } = await query;
+        if (error) throw new Error(error.message);
+
+        todosParaRelacionados = datos;
+        todosLosProductos     = datos;
+        productosFiltrados    = [...datos];
 
         estadoCarga.classList.add('oculto');
 
