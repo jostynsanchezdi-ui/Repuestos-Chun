@@ -599,18 +599,21 @@ body {
   z-index: 500;
   backdrop-filter: blur(3px);
   padding: 1.5rem;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .modal-panel {
   background: var(--color-fondo-panel);
   width: 100%;
   max-width: 520px;
-  height: auto;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
   border-radius: 16px;
   animation: aparecer-panel 0.25s ease;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
 }
 
 @keyframes aparecer-panel {
@@ -1499,16 +1502,16 @@ body {
     font-size: 0.7rem;
   }
 
-  /* ---- Formulario: centrado, ancho completo, sin scroll interno ---- */
+  /* ---- Formulario: centrado, ancho completo ---- */
   .modal-overlay {
     padding: 1rem;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .modal-panel {
     max-width: 100%;
     width: 100%;
-    margin: auto 0;
+    max-height: calc(100vh - 2rem);
   }
 
   .producto-form {
