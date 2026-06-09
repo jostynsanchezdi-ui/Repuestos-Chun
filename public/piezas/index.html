@@ -787,7 +787,7 @@
       const card = e.target.closest('.producto-card');
       if (!card) return;
       const idx = Array.from(document.querySelectorAll('.producto-card')).indexOf(card);
-      if (todosLosProductos[idx]) abrirModal(todosLosProductos[idx]);
+      if (productosFiltrados[idx]) abrirModal(productosFiltrados[idx]);
     });
 
     cargarPiezas();
